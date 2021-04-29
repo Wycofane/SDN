@@ -4,16 +4,15 @@ from flask import Flask, render_template, redirect, url_for, request, make_respo
 import initialize
 import dbUtility as dbU
 import variable
-
+import sensitiveData as sd
 
 # Variable block
-dbUsername = "***"
-dbPassword = "***"
-dbHostIP = "***"
-db = "users"
+dbUsername = sd.dbUsername
+dbPassword = sd.dbPassword
+dbHostIP = sd.dbHostIP
+db = sd.db
 
 connection = mysql.connector.connect(host=dbHostIP, database=db, user=dbUsername, password=dbPassword)
-
 
 # Initialize the Flask APP
 app = Flask(__name__)
@@ -44,7 +43,7 @@ def before_request():
 @app.route('/home')
 def home():
     if not g.user:
-        return redirect('/')
+        return redirect(url_for('index'))
 
     return render_template('home.html')
 
@@ -55,6 +54,11 @@ def help():
     return render_template('help.html')
 
 
+@app.errorhandler(403)
+def forbidden(e):
+    return render_template('403.html'), 403
+
+
 # Error handler sites
 @app.errorhandler(404)
 def page_not_found(e):
@@ -62,7 +66,7 @@ def page_not_found(e):
 
 
 @app.errorhandler(500)
-def page_not_found(e):
+def internal_server_error(e):
     return render_template('500.html'), 500
 
 
@@ -71,7 +75,7 @@ def welcome():
     error = None
 
     if g.user:
-        return redirect('/home')
+        return redirect(url_for('home'))
 
     if request.method == 'POST':
 
@@ -87,7 +91,6 @@ def welcome():
 
         values = dbU.getUser(connection, usernameInput)
 
-
         for row in values:
 
             username = row[1]
@@ -97,7 +100,6 @@ def welcome():
             status = row[3]
 
             if password == passwordInput and username == usernameInput:
-
 
                 resp = make_response(redirect(url_for('home')))
 
@@ -116,6 +118,9 @@ def welcome():
 @app.route('/signup', methods=['GET', 'POST'])
 def register():
     error = None
+
+    if g.user:
+        return redirect(url_for('home'))
 
     # If the User Post the filled form
     if request.method == 'POST':
@@ -162,7 +167,7 @@ def register():
 
         # If all checks are passed then the Account gets created and the password get stored in the DB transformed to a md5 hash
         if len(usernameInput) >= 4 and passwordInput == repeatpasswordInput and dbU.doesUsernameAlreadyExist(
-            connection, usernameInput) and dbU.doesInvitationExist(connection, invitationInput) and len(
+                connection, usernameInput) and dbU.doesInvitationExist(connection, invitationInput) and len(
             passwordInput) >= 8 and not any(not c.isalnum() for c in usernameInput):
             error = "Dein Account wurde erstellt, logge dich nun ein"
 
@@ -177,22 +182,32 @@ def register():
 
 @app.route('/logout')
 def logout():
-
     # Check if the user is in the global context logged in if not redirect to the main page
     if not g.user:
-        return redirect('/')
+        return redirect(url_for('index'))
 
     # Remove the user from the Session
     session.pop('username')
 
     # Redirect to the main page
-    return redirect('/')
+    return redirect(url_for('index'))
+
+
+# Controlpanel
+@app.route('/controlpanel', methods=['GET', 'POST'])
+def controlpanel():
+    error = None
+
+    if not g.user:
+        return redirect(url_for('index'))
+
+    return render_template("controlpanel.html", error=error)
 
 
 # "Main function" start of the Flask APP
 if __name__ == '__main__':
     print('by Julian')
 
-    #initialize.cisco_connection.login("devnetsandbox-usw1-reservation.cisco.com", "it9-vohjus", "EVBVTFBU")
+    # initialize.cisco_connection.login("devnetsandbox-usw1-reservation.cisco.com", "it9-vohjus", "EVBVTFBU")
 
     app.run()
