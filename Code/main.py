@@ -5,6 +5,7 @@ import initialize
 import dbUtility as dbU
 import variable
 import sensitiveData as sd
+import requests
 
 # Variable block
 dbUsername = sd.dbUsername
@@ -114,6 +115,15 @@ def welcome():
     return render_template("loginform.html", error=error)  # render a templates
 
 
+@app.route('/auth', methods=['GET', 'POST'])
+def auth():
+
+    if g.user:
+        return redirect(url_for('home'))
+
+    return redirect(url_for('index'))
+
+
 # Simple Signup form backend
 @app.route('/signup', methods=['GET', 'POST'])
 def register():
@@ -208,6 +218,6 @@ def controlpanel():
 if __name__ == '__main__':
     print('by Julian')
 
-    # initialize.cisco_connection.login("devnetsandbox-usw1-reservation.cisco.com", "it9-vohjus", "EVBVTFBU")
+    print(initialize.get_request("/network/connectionssummary"))
 
     app.run()

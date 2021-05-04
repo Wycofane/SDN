@@ -11,6 +11,7 @@
 	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css">
 
 	<link rel="stylesheet" href="//wycofane.de/static/css/Wycofane.css">
+	<link rel="stylesheet" href="file:///C:/Users/Julian/LogInSystem/static/css/Wycofane.css">
 
 	<link rel="apple-touch-icon" sizes="57x57" href="//wycofane.de/static/img/pics/apple-icon-57x57.png">
 	<link rel="apple-touch-icon" sizes="60x60" href="//wycofane.de/static/img/pics/apple-icon-60x60.png">
@@ -43,34 +44,81 @@
 			Wycofane
 		</a>
 
-		<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria label="Toggle navigation">
+		<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
 		  <span class="navbar-toggler-icon"></span>
 		</button>
 
 		<div class="collapse navbar-collapse" id="navbarNavDropdown">
+		</div>
+		  <form class="d-flex">
+			  <a href="/logout" class="btn btn-outline-primary" role="button">Logout</a>
+		  </form>
+	  </div>
+	</nav>
+
+	    <nav class="navbar navbar-expand-lg navbar-dark" style="background-color: #291344;">
+	  <div class="container-fluid">
+
+		<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown2" aria-controls="navbarNavDropdown" aria-expanded="false" aria label="Toggle navigation">
+		  <span class="navbar-toggler-icon"></span>
+		</button>
+
+		<div class="collapse navbar-collapse" id="navbarNavDropdown2">
 		  <ul class="navbar-nav">
+			  &nbsp;
+			  &nbsp;
+			  &nbsp;
+			  &nbsp;
+			  &nbsp;
+			  &nbsp;
+
 			<li class="nav-item">
-				  <a class="nav-link" href="/auth">Zurück zur Hauptseite</a>
+				  <a class="nav-link" href="/controlpanel"><i class="bi bi-controller"></i> SDN Controlpanel</a>
+			</li>
+			  &nbsp;
+			  &nbsp;
+			  &nbsp;
+			  &nbsp;
+			  &nbsp;
+			  &nbsp;
+			  &nbsp;
+			  &nbsp;
+			  &nbsp;
+			  &nbsp;
+			  &nbsp;
+			  &nbsp;
+			<li class="nav-item">
+				  <a class="nav-link" href="/bonus"><i class="bi bi-hdd-stack"></i> Bonus</a>
 			</li>
 		  </ul>
 		</div>
 	  </div>
 	</nav>
-
 	<div class="container-fluid" >
 		<div class="container-md">
 			&nbsp;
 			&nbsp;
 			&nbsp;
-			<div class="row justify-content-md-center">
-				<div class="col-md-5">
-					<div class="card text-white bg-danger mb-3 border border-2">
-					  <div class="card-header">500</div>
+			<div class="row">
+			  <div class="col-md">
+				<div class="card">
+				  <div class="card-body border border-5">
 					  <div class="card-body">
-                        	<p class="card-text">Da ist etwas Schief gelaufen :(</p>
+						<h5 class="card-title">SDN Cisco</h5>
+						<p class="card-text">SDN Controlpanel options</p>
+						<a href="/controlpanel" class="btn btn-primary">Button 1</a>
+						<a href="/controlpanel" class="btn btn-primary">Button 2</a>
+						<a href="/controlpanel" class="btn btn-primary">Button 3</a>
 					  </div>
-					</div>
+				  </div>
 				</div>
+			  </div>
+				&nbsp;
+				&nbsp;
+				&nbsp;
+				&nbsp;
+				&nbsp;
+
 			</div>
 		</div>
 	</div>

@@ -1,51 +1,62 @@
 import json
 import requests
 import sys
+import sensitiveData as sd
 
-class cisco_connection:
-    def __init__(self, vmanage_ip, username, password):
-        self.vmanage_ip = vmanage_ip
-        self.session = {}
-        self.login(self.vmanage_ip, username, password)
-
-    def login(self, vmanage_ip, username, password):
-        """Login to vmanage"""
-        base_url_str = 'https://%s:20285/'%vmanage_ip
-
-        login_action = '/j_security_check'
-
-        #Format data for loginForm
-        login_data = {'j_username' : username, 'j_password' : password}
-
-        #Url for posting login data
-        login_url = base_url_str + login_action
-        url = base_url_str + login_url
-
-        sess = requests.session()
-        #If the vmanage has a certificate signed by a trusted authority change verify to True
-        login_response = sess.post(url=login_url, data=login_data, verify=True)
+session = {}
+sdWanUrl = sd.vmanage_ip
+username = sd.username
+password = sd.password
 
 
-        if b'<html>' in login_response.content:
-            print ("Login Failed")
-            sys.exit(0)
+# TODO: Token auth not working
 
-        self.session[vmanage_ip] = sess
 
-    def get_request(self, mount_point):
-        """GET request"""
-        url = "https://%s:8443/dataservice/%s"%(self.vmanage_ip, mount_point)
-        #print url
-        response = self.session[self.vmanage_ip].get(url, verify=False)
-        data = response.content
-        return data
+def login():
+    base_url_str = "https://" + sdWanUrl
 
-    def post_request(self, mount_point, payload, headers={'Content-Type': 'application/json'}):
-        """POST request"""
-        url = "https://%s:8443/dataservice/%s"%(self.vmanage_ip, mount_point)
-        payload = json.dumps(payload)
-        print (payload)
+    login_action = "/j_security_check"
 
-        response = self.session[self.vmanage_ip].post(url=url, data=payload, headers=headers, verify=False)
-        data = response.json()
-        return data
+    # Format data for loginForm
+    login_data = {"j_username": username, "j_password": password}
+
+    # Url for posting login data
+    login_url = base_url_str + login_action
+    url = base_url_str + login_url
+
+    sess = requests.session()
+
+    login_response = sess.post(url=login_url, data=login_data, verify=True)
+
+    if b'<html>' in login_response.content:
+        print("Login Failed")
+        sys.exit(0)
+
+    print(login_response)
+
+    session[sdWanUrl] = sess
+    return sess
+
+
+def get_request(request):
+    # login for auth
+    sess = login()
+
+    url = "https://" + sdWanUrl + "/dataservice/" + request
+    # print url
+    response = sess.get(url, verify=False)
+    data = response.content
+    return data
+
+
+def post_request(request, payload, headers={'Content-Type': 'application/json'}):
+    # login for auth
+    login()
+
+    url = "https://" + sdWanUrl + "/dataservice/" + request
+    payload = json.dumps(payload)
+    print(payload)
+
+    response = session[sdWanUrl].post(url=url, data=payload, headers=headers, verify=False)
+    data = response.json()
+    return data

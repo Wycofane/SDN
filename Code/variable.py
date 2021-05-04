@@ -1,2 +1,3 @@
-username = "anon"
+name = "anon"
 authentificatedUsers = []
+
