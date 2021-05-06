@@ -13,8 +13,8 @@ to control the cisco sandbox SD-Wan envoriment, using a Rest-API by cisco.
 </br>
 Dependencies:
 
-> Flask
-> Jinja2
+> Flask </br>
+> Jinja2 </br>
 > mysql-connector-python
 
 
