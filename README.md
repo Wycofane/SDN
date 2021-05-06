@@ -12,12 +12,11 @@ to control the cisco sandbox SD-Wan envoriment, using a Rest-API by cisco.
 
 </br>
 Dependencies:
-```
-Flask
-Jinja2
-mysql-connector-python
-```
-```
+
+> Flask
+> Jinja2
+> mysql-connector-python
+
 
 
 ## The SQL syntax for creating the database tables:
