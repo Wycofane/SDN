@@ -1,6 +1,5 @@
 import json
 import requests
-import sys
 import sensitiveData as sd
 
 session = {}
@@ -9,54 +8,76 @@ username = sd.username
 password = sd.password
 
 
-# TODO: Token auth not working
+# Credits: https://github.com/CiscoDevNet/Getting-started-with-Cisco-SD-WAN-REST-APIs/
+class Authentication:
+
+    @staticmethod
+    def get_jsessionid(sdWanUrl, username, password):
+        api = "/j_security_check"
+        base_url = "https://%s" % (sdWanUrl)
+        url = base_url + api
+        payload = {'j_username': username, 'j_password': password}
+
+        response = requests.post(url=url, data=payload, verify=True)
+        try:
+            cookies = response.headers["Set-Cookie"]
+            jsessionid = cookies.split(";")
+            return (jsessionid[0])
+        except:
+            print("No valid JSESSION ID returned\n")
+            exit()
+
+    @staticmethod
+    def get_token(sdWanUrl, jsessionid):
+        headers = {'Cookie': jsessionid}
+        base_url = "https://%s" % (sdWanUrl)
+        api = "/dataservice/client/token"
+        url = base_url + api
+        response = requests.get(url=url, headers=headers, verify=True)
+        if response.status_code == 200:
+            return (response.text)
+        else:
+            return None
 
 
-def login():
-    base_url_str = "https://" + sdWanUrl
+Auth = Authentication()
+jsessionid = Auth.get_jsessionid(sdWanUrl, username, password)
+token = Auth.get_token(sdWanUrl, jsessionid)
 
-    login_action = "/j_security_check"
+if token is not None:
+    header = {'Content-Type': "application/json", 'Cookie': jsessionid, 'X-XSRF-TOKEN': token}
+else:
+    header = {'Content-Type': "application/json", 'Cookie': jsessionid}
 
-    # Format data for loginForm
-    login_data = {"j_username": username, "j_password": password}
-
-    # Url for posting login data
-    login_url = base_url_str + login_action
-    url = base_url_str + login_url
-
-    sess = requests.session()
-
-    login_response = sess.post(url=login_url, data=login_data, verify=True)
-
-    if b'<html>' in login_response.content:
-        print("Login Failed")
-        sys.exit(0)
-
-    print(login_response)
-
-    session[sdWanUrl] = sess
-    return sess
+base_url = "https://%s/dataservice/" % (sdWanUrl)
 
 
 def get_request(request):
-    # login for auth
-    sess = login()
 
-    url = "https://" + sdWanUrl + "/dataservice/" + request
-    # print url
-    response = sess.get(url, verify=False)
-    data = response.content
+    print(header)
+    url = base_url + request
+    response = requests.get(url, headers=header, verify=True)
+    #data = response.content
+
+    if response.status_code == 200:
+        data = response.json()['data']
+    else:
+        data = "get failed"
+
     return data
 
 
-def post_request(request, payload, headers={'Content-Type': 'application/json'}):
-    # login for auth
-    login()
+def post_request(request, payload):
 
-    url = "https://" + sdWanUrl + "/dataservice/" + request
+    url = base_url + request
     payload = json.dumps(payload)
     print(payload)
 
-    response = session[sdWanUrl].post(url=url, data=payload, headers=headers, verify=False)
-    data = response.json()
-    return data
+    response = requests.post(url=url, data=payload, headers=header, verify=True)
+
+    if response.status_code == 200:
+        response = "post worked"
+    else:
+        response = "post failed"
+
+    return response
