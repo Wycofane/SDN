@@ -26,4 +26,3 @@ create table invitation (invID int AUTO_INCREMENT, inKey char(32) not null, prim
 
 
 
-#### inspired by wycofane.de
