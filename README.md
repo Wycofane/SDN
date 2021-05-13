@@ -6,7 +6,14 @@ This SDN control center is a shool project, and is not a real thing.
 It should simulate how it could look and "feel".
 </br>
 The control center uses pre defined buttons,
-to control the cisco sandbox SD-Wan envoriment, using the Rest-API.
+to control the cisco sandbox SD-Wan envoriment using the Rest-API.
+</br>
+The whoel project take securtity very seriously, thats why SQL injections are not possible and 
+passwords get stored in a md5 hash. Neither me or anyone else have access to the password in your DB.
+</br> 
+As you probably seen many ressource references (mainly in the html part) going to a website <a href="https://wycofane.de">wycofane.de</a> that's my personal
+project and is not finished yet. But the website is similar built, but not communication with cisco. This website communicate with the 
+proxmox rest-api.
 
 
 
