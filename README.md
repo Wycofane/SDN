@@ -6,7 +6,7 @@ This SDN control center is a school project and is not a real thing.
 It should simulate how it could look and "feel".
 
 The control center uses pre defined buttons,
-to control the cisco sandbox SD-Wan envoriment using the rest-API.
+to control the cisco sandbox SD-Wan environment using the rest-API.
 
 The whole project take securtity very seriously, thats why SQL injections are not possible and 
 passwords get stored in a md5 hash. Neither me or anyone else have access to the password in your DB.
