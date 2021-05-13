@@ -11,7 +11,7 @@ to control the cisco sandbox SD-Wan environment using the rest-API.
 The whole project takes securtity very seriously, thats why SQL injections are not possible and 
 passwords get stored in a md5 hash. Neither me nor anyone else has access to the password in your DB.
 
-As you probably have seen many ressource references (mainly in the html part) going to a website called <a href="https://wycofane.de">Wycofane.de</a> that's my personal
+As you probably have seen many ressource references (mainly in the html part) going to a website called <a href="https://wycofane.de">Wycofane.de</a>. That's my personal
 project and is not finished yet. The website is similar built, but not communication with cisco. <a href="https://wycofane.de">Wycofane.de</a> communicate with the 
 proxmox rest-API.
 
