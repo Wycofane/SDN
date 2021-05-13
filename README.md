@@ -1,19 +1,19 @@
 # SDN python
 Python SDN control center with Flask.
 
-Flask webserver with Jinja2 object paired with the beautiful bootstrap v5 framework.
+Flask web server with Jinja2 object paired with the beautiful bootstrap v5 framework.
 This SDN control center is a school project and is not a real thing.
 It should simulate how it could look and "feel".
 
-The control center uses pre defined buttons,
-to control the cisco sandbox SD-Wan environment using the rest-API.
+The control center uses pre-defined buttons,
+to control the Cisco sandbox SD-Wan environment using the rest-API.
 
-The whole project takes securtity very seriously, thats why SQL injections are not possible and 
+The whole project takes security very seriously, that's why SQL injections are not possible and 
 passwords get stored in a md5 hash. Neither me nor anyone else has access to the password in your DB.
 
-As you probably have seen many ressource references (mainly in the html part) going to a website named <a href="https://wycofane.de">Wycofane.de</a>. That's my personal
-project and is not finished yet. The website is built similar but there is no communication with cisco. <a href="https://wycofane.de">Wycofane.de</a> communicates with the 
-proxmox rest-API.
+As you probably have seen many resource references (mainly in the HTML part) go to a website named <a href="https://wycofane.de">Wycofane.de</a>. That's my personal
+project and is not finished yet. The website is built similar, but there is no communication with Cisco. <a href="https://wycofane.de">Wycofane.de</a> communicates with the 
+Proxmox rest-API.
 
 
 
