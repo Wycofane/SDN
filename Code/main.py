@@ -1,26 +1,27 @@
 import hashlib
+from mainUtility import jsonGet
 from flask import Flask, render_template, redirect, url_for, request, make_response, g, session, Response
 import initialize
 import dbUtility as dbU
 import variable
-import sensitiveData as sd
-import requests
+from logger import logger
 
-# Variable block
-
-
+# Initialize a database connection
 connection = variable.connection
 
 # Initialize the Flask APP
 app = Flask(__name__)
 
-# Secret App key for Session usage
+# Secret app key for Session usage
 app.secret_key = variable.secretkey
 
 
 # Default Index route site
 @app.route('/')
 def index():
+    if g.user:
+        return redirect(url_for('home'))
+
     return render_template('index.html')
 
 
@@ -53,17 +54,26 @@ def help():
 
 @app.errorhandler(403)
 def forbidden(e):
+    if g.user:
+        return render_template('403_li.html'), 403
+
     return render_template('403.html'), 403
 
 
 # Error handler sites
 @app.errorhandler(404)
 def page_not_found(e):
+    if g.user:
+        return render_template('404_li.html'), 404
+    
     return render_template('404.html'), 404
 
 
 @app.errorhandler(500)
 def internal_server_error(e):
+    if g.user:
+        return render_template('500_li.html'), 500
+
     return render_template('500.html'), 500
 
 
@@ -86,6 +96,7 @@ def welcome():
 
         passwordInput = hashlib.md5(passwordInput.encode()).hexdigest()
 
+        print(usernameInput)
         values = dbU.getUser(connection, usernameInput)
 
         for row in values:
@@ -105,8 +116,8 @@ def welcome():
                 return resp
 
             else:
-                error = 'Invalid Credentials. Please try again.'
-        error = 'Invalid Credentials. Please try again.'
+                error = 'Falsche Login Daten bitte erneut versuchen!'
+        error = 'Falsche login Daten bitte erneut versuchen!'
 
     return render_template("loginform.html", error=error)  # render a templates
 
@@ -210,10 +221,30 @@ def controlpanel():
     return render_template("controlpanel.html", error=error)
 
 
+@app.route('/controlpanelAction', methods=['GET', 'POST'])
+def controlpanelAction():
+
+    if not g.user:
+        return redirect(url_for('index'))
+
+    ActionId = request.args['id']
+
+    if ActionId == "1":
+        print("do action 1")
+    if ActionId == "2":
+        print("do action 2")
+
+    return render_template("controlpanel.html")
+
+
 # "Main function" start of the Flask APP
 if __name__ == '__main__':
     print('by Julian')
 
-    print(initialize.get_request("network/connectionssummary"))
 
-    app.run()
+# TODO: Work with the json responses - sort and acquire values
+    print(jsonGet("network/connectionssummary"))
+    print(jsonGet("device/action/list"))
+
+# Run the flask server accessible in the LAN
+    app.run(host="0.0.0.0")

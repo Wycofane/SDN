@@ -11,7 +11,6 @@
 	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css">
 
 	<link rel="stylesheet" href="//wycofane.de/static/css/Wycofane.css">
-	<link rel="stylesheet" href="file:///C:/Users/Julian/LogInSystem/static/css/Wycofane.css">
 
 	<link rel="apple-touch-icon" sizes="57x57" href="//wycofane.de/static/img/pics/apple-icon-57x57.png">
 	<link rel="apple-touch-icon" sizes="60x60" href="//wycofane.de/static/img/pics/apple-icon-60x60.png">
@@ -44,12 +43,13 @@
 			Wycofane
 		</a>
 
-
 		<div class="collapse navbar-collapse" id="navbarNavDropdown">
+		  <ul class="navbar-nav">
+			<li class="nav-item">
+				  <a class="nav-link" href="/auth">Zurück zur Hauptseite</a>
+			</li>
+		  </ul>
 		</div>
-		  <form class="d-flex">
-			  <a href="/logout" class="btn btn-outline-primary" role="button">Logout</a>
-		  </form>
 	  </div>
 	</nav>
 
@@ -70,7 +70,7 @@
 			  &nbsp;
 
 			<li class="nav-item">
-				  <a class="nav-link" href="/home"><i class="bi bi-controller"></i> Home</a>
+				  <a class="nav-link" href="/controlpanel"><i class="bi bi-controller"></i> Controlpanel</a>
 			</li>
 			  &nbsp;
 			  &nbsp;
@@ -91,31 +91,21 @@
 		</div>
 	  </div>
 	</nav>
+
 	<div class="container-fluid" >
 		<div class="container-md">
 			&nbsp;
 			&nbsp;
 			&nbsp;
-			<div class="row">
-			  <div class="col-md">
-				<div class="card">
-				  <div class="card-body border border-5">
+			<div class="row justify-content-md-center">
+				<div class="col-md-5">
+					<div class="card text-white bg-danger mb-3 border border-2">
+					  <div class="card-header">404</div>
 					  <div class="card-body">
-						<h5 class="card-title">SDN Cisco</h5>
-						<p class="card-text">SDN Controlpanel options</p>
-						<a href="/controlpanelAction?id=1" class="btn btn-primary">Button 1</a>
-						<a href="/controlpanelAction?id=2" class="btn btn-primary">Button 2</a>
-						<a href="/controlpanel" class="btn btn-primary">Button 3</a>
+                        	<p class="card-text">Nicht gefunden</p>
 					  </div>
-				  </div>
+					</div>
 				</div>
-			  </div>
-				&nbsp;
-				&nbsp;
-				&nbsp;
-				&nbsp;
-				&nbsp;
-
 			</div>
 		</div>
 	</div>

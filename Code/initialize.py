@@ -2,7 +2,6 @@ import json
 import requests
 import sensitiveData as sd
 
-session = {}
 sdWanUrl = sd.vmanage_ip
 username = sd.username
 password = sd.password
@@ -53,14 +52,11 @@ base_url = "https://%s/dataservice/" % (sdWanUrl)
 
 
 def get_request(request):
-
-    print(header)
     url = base_url + request
     response = requests.get(url, headers=header, verify=True)
-    #data = response.content
 
     if response.status_code == 200:
-        data = response.json()['data']
+        data = response.content
     else:
         data = "get failed"
 
@@ -68,7 +64,6 @@ def get_request(request):
 
 
 def post_request(request, payload):
-
     url = base_url + request
     payload = json.dumps(payload)
     print(payload)
