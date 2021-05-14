@@ -1,5 +1,6 @@
 from datetime import datetime
 
+
 # Log function to write actions permanently to a text file
 def logger(entry):
     log = open("logSDN.txt", "a+")
@@ -8,4 +9,4 @@ def logger(entry):
 
     entry = str(entry)
 
-    log.write(now + ":   " + entry + "\r\n")
+    log.write(now + ":   " + entry + "\n")

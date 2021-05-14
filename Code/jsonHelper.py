@@ -8,4 +8,4 @@ def byteToJson(byte):
     data = json.loads(my_json)
     s = json.dumps(data, indent=4, sort_keys=True)
 
-    return s
+    return s, data

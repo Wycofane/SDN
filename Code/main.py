@@ -1,4 +1,6 @@
 import hashlib
+import json
+
 from mainUtility import jsonGet
 from flask import Flask, render_template, redirect, url_for, request, make_response, g, session, Response
 import initialize
@@ -65,7 +67,7 @@ def forbidden(e):
 def page_not_found(e):
     if g.user:
         return render_template('404_li.html'), 404
-    
+
     return render_template('404.html'), 404
 
 
@@ -124,7 +126,6 @@ def welcome():
 
 @app.route('/auth', methods=['GET', 'POST'])
 def auth():
-
     if g.user:
         return redirect(url_for('home'))
 
@@ -223,7 +224,6 @@ def controlpanel():
 
 @app.route('/controlpanelAction', methods=['GET', 'POST'])
 def controlpanelAction():
-
     if not g.user:
         return redirect(url_for('index'))
 
@@ -239,12 +239,18 @@ def controlpanelAction():
 
 # "Main function" start of the Flask APP
 if __name__ == '__main__':
-    print('by Julian')
+    logger('Startup SDN Controller')
 
+    # print(jsonGet("network/connectionssummary"))
+    resp, data = jsonGet("device")
+    variable.deviceData = data
 
-# TODO: Work with the json responses - sort and acquire values
-    print(jsonGet("network/connectionssummary"))
-    print(jsonGet("device/action/list"))
+    for value in variable.deviceData['data']:
+        deviceID = value['deviceId']
+        hostname = value['host-name']
+        reachable = value['reachability']
+        status = value['status']
+        print(deviceID + " " + hostname + " " + reachable + " " + status)
 
-# Run the flask server accessible in the LAN
+    # Run the flask server accessible in the LAN
     app.run(host="0.0.0.0")

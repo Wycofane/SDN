@@ -9,3 +9,4 @@ dbPassword = sd.dbPassword
 dbHostIP = sd.dbHostIP
 db = sd.db
 connection = mysql.connector.connect(host=dbHostIP, database=db, user=dbUsername, password=dbPassword)
+deviceData = []
