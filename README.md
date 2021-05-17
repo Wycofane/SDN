@@ -1,5 +1,5 @@
 # SDN python
-Python SDN control center with Flask. Focues on the GUI.
+Python SDN control center with Flask. Mainly build for the GUI.
 
 Flask web server with Jinja2 object paired with the beautiful bootstrap v5 framework.
 This SDN control center is a school project and is not a real thing.
