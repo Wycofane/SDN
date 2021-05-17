@@ -10,3 +10,6 @@ dbHostIP = sd.dbHostIP
 db = sd.db
 connection = mysql.connector.connect(host=dbHostIP, database=db, user=dbUsername, password=dbPassword)
 deviceData = []
+site = """"""
+controlpanel = """"""
+border = """"""

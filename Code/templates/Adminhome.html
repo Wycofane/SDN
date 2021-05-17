@@ -53,7 +53,7 @@
 	  </div>
 	</nav>
 
-	<nav class="navbar navbar-expand-lg navbar-dark" style="background-color: #291344;">
+	    <nav class="navbar navbar-expand-lg navbar-dark" style="background-color: #291344;">
 	  <div class="container-fluid">
 
 		<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown2" aria-controls="navbarNavDropdown" aria-expanded="false" aria label="Toggle navigation">
@@ -70,7 +70,7 @@
 			  &nbsp;
 
 			<li class="nav-item">
-				  <a class="nav-link" href="/home"><i class="bi bi-controller"></i> Home</a>
+				  <a class="nav-link" href="/controlpanel"><i class="bi bi-controller"></i> SDN Controlpanel</a>
 			</li>
 			  &nbsp;
 			  &nbsp;
@@ -102,10 +102,34 @@
 				  <div class="card-body border border-5">
 					  <div class="card-body">
 						<h5 class="card-title">SDN Cisco</h5>
-						<p class="card-text">SDN Controlpanel options</p>
-						<a href="/controlpanelAction?id=1" class="btn btn-primary">Button 1</a>
-						<a href="/controlpanelAction?id=2" class="btn btn-primary">Button 2</a>
-						<a href="/controlpanel" class="btn btn-primary">Button 3</a>
+						<p class="card-text">Besuche deine SDN Controlpanel</p>
+						<a href="/controlpanel" class="btn btn-primary">Klicke hier</a>
+					  </div>
+				  </div>
+				</div>
+			  </div>
+				<div class="col-md">
+				<div class="card">
+				  <div class="card-body border border-5">
+					  <div class="card-body">
+						<h5 class="card-title">Einladungscodes</h5>
+						<p class="card-text">Generiere Einladungscodes</p>
+						<form action="" method="post">
+						  	<input name="amount" type="number" placeholder="Anzahl keys" class="text-capitalize">
+							<button id="keysbtn" class="btn btn-outline-primary" value="keys" type="submit" data-bs-toggle="modal" data-bs-target="#amountModal">Jetzt erstellen</button>
+						</form>
+
+						  <div class="modal fade" id="amountModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+							  <div class="modal-dialog">
+								<div class="modal-content">
+								  <div class="modal-header">
+									  <h5 class="modal-title" id="amountModalLabel">Einladungscodes erstellt</h5>
+									  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+								  </div>
+								</div>
+							  </div>
+							</div>
+
 					  </div>
 				  </div>
 				</div>

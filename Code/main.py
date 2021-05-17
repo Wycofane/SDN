@@ -1,12 +1,10 @@
 import hashlib
-import json
-
-from mainUtility import jsonGet
+from mainUtility import addDevicesToGui, buildSiteCP
 from flask import Flask, render_template, redirect, url_for, request, make_response, g, session, Response
-import initialize
 import dbUtility as dbU
 import variable
 from logger import logger
+from sensitiveData import adminUsername
 
 # Initialize a database connection
 connection = variable.connection
@@ -45,7 +43,26 @@ def home():
     if not g.user:
         return redirect(url_for('index'))
 
+    if g.user.username == adminUsername:
+        return redirect(url_for('homeAdmin'))
+
     return render_template('home.html')
+
+
+@app.route('/homeAdmin', methods=['GET', 'POST'])
+def homeAdmin():
+    if not g.user:
+        return redirect(url_for('index'))
+
+    if request.method == 'POST':
+        amount = request.form['amount']
+        dbU.invGen(connection, amount)
+        print(amount)
+
+    if g.user.username != adminUsername:
+        render_template('home.html')
+
+    return render_template('Adminhome.html')
 
 
 # Default explanations site
@@ -93,12 +110,10 @@ def welcome():
         dbU.fillArray(connection)
 
         usernameInput = request.form['username']
-
         passwordInput = request.form['password']
 
         passwordInput = hashlib.md5(passwordInput.encode()).hexdigest()
 
-        print(usernameInput)
         values = dbU.getUser(connection, usernameInput)
 
         for row in values:
@@ -107,15 +122,15 @@ def welcome():
 
             password = row[2]
 
-            status = row[3]
-
             if password == passwordInput and username == usernameInput:
-
-                resp = make_response(redirect(url_for('home')))
 
                 session['username'] = usernameInput
 
-                return resp
+
+                if usernameInput == adminUsername:
+                    return redirect(url_for('homeAdmin'))
+                else:
+                    return redirect(url_for('home'))
 
             else:
                 error = 'Falsche Login Daten bitte erneut versuchen!'
@@ -184,9 +199,9 @@ def register():
             error = "ERROR: Dein Benutzername muss mindestens 4 Zeichen lang sein"
 
         # If all checks are passed then the Account gets created and the password get stored in the DB transformed to a md5 hash
-        if len(usernameInput) >= 4 and passwordInput == repeatpasswordInput and dbU.doesUsernameAlreadyExist(
-                connection, usernameInput) and dbU.doesInvitationExist(connection, invitationInput) and len(
-            passwordInput) >= 8 and not any(not c.isalnum() for c in usernameInput):
+        if len(usernameInput) >= 4 and passwordInput == repeatpasswordInput and dbU.doesUsernameAlreadyExist(connection, usernameInput) \
+                and dbU.doesInvitationExist(connection, invitationInput) and \
+                len(passwordInput) >= 8 and not any(not c.isalnum() for c in usernameInput):
             error = "Dein Account wurde erstellt, logge dich nun ein"
 
             passwordInput = hashlib.md5(passwordInput.encode()).hexdigest()
@@ -219,38 +234,15 @@ def controlpanel():
     if not g.user:
         return redirect(url_for('index'))
 
-    return render_template("controlpanel.html", error=error)
-
-
-@app.route('/controlpanelAction', methods=['GET', 'POST'])
-def controlpanelAction():
-    if not g.user:
-        return redirect(url_for('index'))
-
-    ActionId = request.args['id']
-
-    if ActionId == "1":
-        print("do action 1")
-    if ActionId == "2":
-        print("do action 2")
-
-    return render_template("controlpanel.html")
+    buildSiteCP()
+    return variable.controlpanel
 
 
 # "Main function" start of the Flask APP
 if __name__ == '__main__':
     logger('Startup SDN Controller')
 
-    # print(jsonGet("network/connectionssummary"))
-    resp, data = jsonGet("device")
-    variable.deviceData = data
-
-    for value in variable.deviceData['data']:
-        deviceID = value['deviceId']
-        hostname = value['host-name']
-        reachable = value['reachability']
-        status = value['status']
-        print(deviceID + " " + hostname + " " + reachable + " " + status)
+    addDevicesToGui()
 
     # Run the flask server accessible in the LAN
-    app.run(host="0.0.0.0")
+    app.run(host="0.0.0.0", port=80)

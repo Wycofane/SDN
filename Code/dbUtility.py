@@ -1,4 +1,6 @@
-from mysql.connector import Error
+import random
+import string
+
 import variable
 
 
@@ -147,3 +149,16 @@ def getUser(connection, username):
     dbcur.close()
 
     return record
+
+
+def invGen(connection, amount):
+    amount = int(amount)
+    for i in range(amount):
+        key = ''.join(random.SystemRandom().choice(string.ascii_uppercase + string.ascii_lowercase + string.digits) for i in range(32))
+        dbcur = connection.cursor()
+
+        dbcur.execute("INSERT INTO invitation (inKey) VALUES ('" + key + "');")
+
+        connection.commit()
+
+        dbcur.close()
