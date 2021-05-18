@@ -1,10 +1,11 @@
 import hashlib
-from Code import initialize, jsonHelper
-from mainUtility import addDevicesToGui, buildSiteCP
 from flask import Flask, render_template, redirect, url_for, request, g, session
 import dbUtility as dbU
+import initialize
+import jsonHelper
 import variable
 from logger import logger
+from mainUtility import addDevicesToGui, buildSiteCP
 from sensitiveData import adminUsername
 
 # Initialize a database connection

@@ -161,6 +161,8 @@ def invGen(connection, amount):
     if amount > 100:
         amount = 100
 
+    variable.invites = ""
+
     # for every request key generate a invitation
     for i in range(amount):
         key = ''.join(
