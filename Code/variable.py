@@ -13,3 +13,5 @@ deviceData = []
 site = """"""
 controlpanel = """"""
 border = """"""
+invites = []
+string = ""

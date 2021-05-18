@@ -1,13 +1,13 @@
-import json
 import requests
 import sensitiveData as sd
+
 
 sdWanUrl = sd.vmanage_ip
 username = sd.username
 password = sd.password
 
 
-# Credits: https://github.com/CiscoDevNet/Getting-started-with-Cisco-SD-WAN-REST-APIs/
+# Credits: https://github.com/CiscoDevNet/Getting-started-with-Cisco-SD-WAN-REST-APIs/ not my code so no comments
 class Authentication:
 
     @staticmethod
@@ -65,14 +65,11 @@ def get_request(request):
 
 def post_request(request, payload):
     url = base_url + request
-    payload = json.dumps(payload)
-    print(payload)
-
     response = requests.post(url=url, data=payload, headers=header, verify=True)
 
     if response.status_code == 200:
         response = "post worked"
     else:
-        response = "post failed"
+        response = "post failed " + str(response.status_code)
 
     return response

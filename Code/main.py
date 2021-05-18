@@ -1,6 +1,7 @@
 import hashlib
+from Code import initialize, jsonHelper
 from mainUtility import addDevicesToGui, buildSiteCP
-from flask import Flask, render_template, redirect, url_for, request, make_response, g, session, Response
+from flask import Flask, render_template, redirect, url_for, request, g, session
 import dbUtility as dbU
 import variable
 from logger import logger
@@ -19,6 +20,7 @@ app.secret_key = variable.secretkey
 # Default Index route site
 @app.route('/')
 def index():
+    # Check if the user is in the global context logged in if not redirect to the main page
     if g.user:
         return redirect(url_for('home'))
 
@@ -31,7 +33,6 @@ def before_request():
 
     if 'username' in session:
         if len(variable.authentificatedUsers) > 0:
-            print(variable.authentificatedUsers)
             for x in variable.authentificatedUsers:
                 if x.username == session['username']:
                     user = x
@@ -40,6 +41,7 @@ def before_request():
 
 @app.route('/home')
 def home():
+    # Check if the user is in the global context logged in if not redirect to the main page
     if not g.user:
         return redirect(url_for('index'))
 
@@ -51,18 +53,31 @@ def home():
 
 @app.route('/homeAdmin', methods=['GET', 'POST'])
 def homeAdmin():
+    error = None
+
+    # check if the user is in the global context logged in if not redirect to the main page
     if not g.user:
         return redirect(url_for('index'))
 
+    # if the user press the button with the type "submit" then do smth
     if request.method == 'POST':
         amount = request.form['amount']
-        dbU.invGen(connection, amount)
-        print(amount)
 
+        if amount == "0":
+            error = "Anzahl zu klein"
+        else:
+            dbU.invGen(connection, amount)
+
+            for invite in variable.invites:
+                variable.string = variable.string + invite + "\n"
+            error = variable.string
+
+    # check if the user is an admin if not redirect to the normal ladning page
     if g.user.username != adminUsername:
         render_template('home.html')
 
-    return render_template('Adminhome.html')
+    # render the amdin menu
+    return render_template('Adminhome.html', error=error)
 
 
 # Default explanations site
@@ -73,6 +88,7 @@ def help():
 
 @app.errorhandler(403)
 def forbidden(e):
+    # Check if the user is in the global context logged in if yes redirect to the page but with changed layout
     if g.user:
         return render_template('403_li.html'), 403
 
@@ -82,6 +98,7 @@ def forbidden(e):
 # Error handler sites
 @app.errorhandler(404)
 def page_not_found(e):
+    # Check if the user is in the global context logged in if yes redirect to the page but with changed layout
     if g.user:
         return render_template('404_li.html'), 404
 
@@ -90,6 +107,7 @@ def page_not_found(e):
 
 @app.errorhandler(500)
 def internal_server_error(e):
+    # Check if the user is in the global context logged in if yes redirect to the page but with changed layout
     if g.user:
         return render_template('500_li.html'), 500
 
@@ -105,28 +123,36 @@ def welcome():
 
     if request.method == 'POST':
 
+        # remove the browser from the session
         session.pop('username', None)
 
+        # add every user registered to an a array (maybe not scale friendly)
         dbU.fillArray(connection)
 
+        # request the data typed in
         usernameInput = request.form['username']
         passwordInput = request.form['password']
 
+        # convert the password to a md5 hash
         passwordInput = hashlib.md5(passwordInput.encode()).hexdigest()
 
+        # get the user from the db
         values = dbU.getUser(connection, usernameInput)
 
+        # iterate through the user
         for row in values:
 
+            # get the data from the user (db)object
             username = row[1]
-
             password = row[2]
 
+            # check if the datas are the same (basic login stuff)
             if password == passwordInput and username == usernameInput:
 
+                # if yes add the user to the session
                 session['username'] = usernameInput
 
-
+                # check if it is the admin
                 if usernameInput == adminUsername:
                     return redirect(url_for('homeAdmin'))
                 else:
@@ -141,6 +167,7 @@ def welcome():
 
 @app.route('/auth', methods=['GET', 'POST'])
 def auth():
+    # Check if the user is in the global context logged in if not redirect to the main page
     if g.user:
         return redirect(url_for('home'))
 
@@ -152,6 +179,7 @@ def auth():
 def register():
     error = None
 
+    # Check if the user is in the global context logged in if yes redirect to the ladning page
     if g.user:
         return redirect(url_for('home'))
 
@@ -199,15 +227,19 @@ def register():
             error = "ERROR: Dein Benutzername muss mindestens 4 Zeichen lang sein"
 
         # If all checks are passed then the Account gets created and the password get stored in the DB transformed to a md5 hash
-        if len(usernameInput) >= 4 and passwordInput == repeatpasswordInput and dbU.doesUsernameAlreadyExist(connection, usernameInput) \
+        if len(usernameInput) >= 4 and passwordInput == repeatpasswordInput and dbU.doesUsernameAlreadyExist(connection,
+                                                                                                             usernameInput) \
                 and dbU.doesInvitationExist(connection, invitationInput) and \
                 len(passwordInput) >= 8 and not any(not c.isalnum() for c in usernameInput):
             error = "Dein Account wurde erstellt, logge dich nun ein"
 
+            # convert password to a md5 hash
             passwordInput = hashlib.md5(passwordInput.encode()).hexdigest()
 
+            # add the user to the db
             dbU.insertValueIntoUser(connection, usernameInput, passwordInput)
 
+            # delete the invitation
             dbU.deleteInvitation(connection, invitationInput)
 
     return render_template("register.html", error=error)  # render a templates
@@ -226,22 +258,71 @@ def logout():
     return redirect(url_for('index'))
 
 
+@app.route('/controlpanelAction', methods=['GET', 'POST'])
+def controlpanelAction():
+
+    # Check if the user is in the global context logged in if not redirect to the main page
+    if not g.user:
+        return redirect(url_for('index'))
+
+    # get the actionID from the url
+    ActionId = request.args['id']
+
+    # for loop helper integer
+    i = 1
+
+    # iterate trhough every device that cisco sended us
+    for value in variable.deviceData['data']:
+
+        # acquire the values of the current device
+        hostname = value['host-name']
+        uuid = value['uuid']
+        ip = value['system-ip']
+
+        # if it is the right device build the payload and send it
+        if str(i) == ActionId:
+
+            # get the payload build as a json
+            payload = jsonHelper.payloadBuilderReboot(hostname, ip, uuid)
+
+            # execute the post request "reboot"
+            logger(initialize.post_request("device/action/reboot", payload))
+        i = i + 1
+
+    return redirect(url_for("controlpanel"))
+
+
 # Controlpanel
 @app.route('/controlpanel', methods=['GET', 'POST'])
 def controlpanel():
     error = None
 
+    # Check if the user is in the global context logged in if not redirect to the main page
     if not g.user:
         return redirect(url_for('index'))
 
+    # build the dynamic site
     buildSiteCP()
+
+    # render the dynamic page
     return variable.controlpanel
+
+
+# small gimick just to populate the navbar
+@app.route('/bonus', methods=['GET', 'POST'])
+def bonus():
+    # Check if the user is in the global context logged in if not redirect to the main page
+    if not g.user:
+        return redirect(url_for('index'))
+
+    return render_template('bonus.html')
 
 
 # "Main function" start of the Flask APP
 if __name__ == '__main__':
     logger('Startup SDN Controller')
 
+    # add the devices of the sandbox dynamically
     addDevicesToGui()
 
     # Run the flask server accessible in the LAN

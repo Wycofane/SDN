@@ -11,33 +11,38 @@ def jsonGet(url):
     obj, data = jsonHelper.byteToJson(data)
 
     # logging the action for later problem solving (if br0k3n)
-    logger("resp-API request: /dataservice/" + url)
+    logger("rest-API request: /dataservice/" + url)
 
     # return both objects
     return obj, data
 
 
 def addDevicesToGui():
-    # write the json answer to a global variable
+    site = ""
+
+    # ask cisco for the devices then write the json answer to a global variable
     resp, data = jsonGet("device")
     variable.deviceData = data
 
-    site = """"""
+    logger(data)
+    i = 1
 
     for value in variable.deviceData['data']:
         deviceID = value['deviceId']
         hostname = value['host-name']
         reachable = value['reachability']
         status = value['status']
+
+        # write the informations to the logger (debug)
         logger(deviceID + " " + hostname + " " + reachable + " " + status)
 
-        # TODO: handle the values and add it to a html template
-
+        # change the colors of the border if the cisco device is online
         if status == "normal":
             variable.border = """border-success"""
         else:
             variable.border = """border-danger"""
 
+        # append every device to the site and build it with the variables
         site = site + """
             
             <div class="col-sm">
@@ -47,13 +52,26 @@ def addDevicesToGui():
                             <p class="card-text">Status: """ + status + """</p>
                             <p class="card-text">Erreichbarkeit: """ + reachable + """</p>
                             <p class="card-text">Device ID: """ + deviceID + """</p>
+                            <form action="" method="post">
+                                <a href="/controlpanelAction?id=""" + str(i) + """" class="btn btn-primary" type="submit">Neustarten</a>
+                            </form>
                       </div>
 				</div>
 			</div>
         """
+
+        """
+        Normalerweise würde der Neustart aufruf funktionieren. Aber Cisco erlaubt in der Always-ON Sandbox keine ändernungen:
+        Access forbidden: role not allowed{"error":{"message":"Forbidden","details":"User does not have permission to access this resource","code":"DS0001"}}
+        """
+
+        # put the build site in a global context
         variable.site = site
 
+        i = i + 1
 
+
+# the main building of the site with a frame and the dynamic content
 def buildSiteCP():
     variable.controlpanel = """
     <!doctype html>
@@ -175,4 +193,3 @@ def buildSiteCP():
       </body>
     </html>
     """
-
