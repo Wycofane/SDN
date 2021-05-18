@@ -23,14 +23,14 @@ Layout sensitiveData.py:
 ```
 
 ```
-dbUsername = "user**"</br>
-dbPassword = "**"</br>
-dbHostIP = "+++.+++.+++.+++"
+dbUsername = "user"
+dbPassword = "password"
+dbHostIP = "i.p.a.ddress"
 db = "users"
 vmanage_ip = "sandboxIPorURL"
 username = "devnetuser"
-password = "CiscoPW**"
-adminUsername = ""
+password = "CiscoPW"
+adminUsername = "admin"
 ```
 </code>
 
