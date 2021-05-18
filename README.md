@@ -21,6 +21,8 @@ Layout sensitiveData.py:
 
 <code>
 ```
+
+```
 dbUsername = "user**"</br>
 dbPassword = "**"</br>
 dbHostIP = "+++.+++.+++.+++"
