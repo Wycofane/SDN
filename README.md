@@ -17,6 +17,8 @@ Proxmox rest-API.
 
 
 </br>
+You have to create a file named "sensitiveData.py" in order to use this software.
+
 Layout sensitiveData.py:
 
 
