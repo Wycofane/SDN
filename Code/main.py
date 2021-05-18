@@ -69,6 +69,8 @@ def homeAdmin():
         else:
             dbU.invGen(connection, amount)
 
+            variable.string = ""
+
             for invite in variable.invites:
                 variable.string = variable.string + invite + "\n"
             error = variable.string
