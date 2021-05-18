@@ -20,7 +20,6 @@ Proxmox rest-API.
 Layout sensitiveData.py:
 
 <code>
-```
 
 ```
 dbUsername = "user"
