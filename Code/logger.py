@@ -14,3 +14,4 @@ def logger(entry):
 
     # add the entry to the log file
     log.write(now + ":   " + entry + "\n")
+

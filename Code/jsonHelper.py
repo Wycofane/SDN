@@ -33,3 +33,4 @@ def payloadBuilderReboot(hostname, ip, uuid):
     payload = json.dumps(payload)
 
     return payload
+
