@@ -20,14 +20,14 @@ Proxmox rest-API.
 Layout sensitiveData.py:
 
 <code>
->dbUsername = "user**"
->dbPassword = "**"
->dbHostIP = "+++.+++.+++.+++"
->db = "users"
->vmanage_ip = "sandboxIPorURL"
->username = "devnetuser"
->password = "CiscoPW**"
->adminUsername = ""
+dbUsername = "user**"
+dbPassword = "**"
+dbHostIP = "+++.+++.+++.+++"
+db = "users"
+vmanage_ip = "sandboxIPorURL"
+username = "devnetuser"
+password = "CiscoPW**"
+adminUsername = ""
 </code>
 
 </br>
