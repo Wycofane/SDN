@@ -15,23 +15,8 @@ As you probably have seen many resource references (mainly in the HTML part) go 
 project and is not finished yet. The website is built similar, but there is no communication with Cisco. <a href="https://wycofane.de">Wycofane.de</a> communicates with the 
 Proxmox rest-API.
 
-
-</br>
-You have to create a file named "sensitiveData.py" in order to use this software.
-
-Layout sensitiveData.py:
-
-
-```
-dbUsername = "user"
-dbPassword = "password"
-dbHostIP = "i.p.a.ddress"
-db = "users"
-vmanage_ip = "sandboxIPorURL"
-username = "devnetuser"
-password = "CiscoPW"
-adminUsername = "admin"
-```
+Get started:
+<a href="https://github.com/wycofane/sdn/wiki">Wiki</a>
 
 </br>
 Dependencies:
@@ -44,7 +29,7 @@ Dependencies:
 
 ## The SQL syntax for creating the database tables:
 ```
-create table users (userID int AUTO_INCREMENT, username varchar(255) Not null, password char(32) Not null, status int, primary key (userID));
+create table users (userID int AUTO_INCREMENT, username varchar(255) Not null, password char(32) Not null, status int, primary key (userID));         
 
 create table invitation (invID int AUTO_INCREMENT, inKey char(32) not null, primary key (invID));
 ```
