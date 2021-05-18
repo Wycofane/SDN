@@ -175,4 +175,3 @@ def invGen(connection, amount):
         connection.commit()
         dbcur.close()
         variable.invites.append(key)
-
