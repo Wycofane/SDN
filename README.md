@@ -20,8 +20,8 @@ Proxmox rest-API.
 Layout sensitiveData.py:
 
 <code>
-dbUsername = "user**"
-dbPassword = "**"
+dbUsername = "user**"</br>
+dbPassword = "**"</br>
 dbHostIP = "+++.+++.+++.+++"
 db = "users"
 vmanage_ip = "sandboxIPorURL"
