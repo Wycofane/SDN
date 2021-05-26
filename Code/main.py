@@ -9,7 +9,7 @@ from mainUtility import addDevicesToGui, buildSiteCP
 from sensitiveData import adminUsername
 
 # Initialize a database connection
-connection = variable.connection
+connection = variable.createConnection()
 
 # Initialize the Flask APP
 app = Flask(__name__)
