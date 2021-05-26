@@ -15,7 +15,7 @@ As you probably have seen many resource references (mainly in the HTML part) go 
 project and is not finished yet. The website is built similar, but there is no communication with Cisco. <a href="https://wycofane.de">Wycofane.de</a> communicates with the 
 Proxmox rest-API.
 
-The release is testable at <a href="http://wycoserver.net/>wycoserver.net</a>
+The release is testable at <a href="http://wycoserver.net">wycoserver.net</a>
 
 Get started:
 <a href="https://github.com/wycofane/sdn/wiki">Wiki</a>
