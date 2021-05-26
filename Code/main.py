@@ -8,9 +8,6 @@ from logger import logger
 from mainUtility import addDevicesToGui, buildSiteCP
 from sensitiveData import adminUsername
 
-# Initialize a database connection
-connection = variable.createConnection()
-
 # Initialize the Flask APP
 app = Flask(__name__)
 
@@ -64,10 +61,13 @@ def homeAdmin():
     if request.method == 'POST':
         amount = request.form['amount']
 
+        # build a connection to the DB with failsave
+        connectionInnerScope = variable.createConnection()
+
         if amount == "0":
             error = "Anzahl zu klein"
         else:
-            dbU.invGen(connection, amount)
+            dbU.invGen(connectionInnerScope, amount)
 
             variable.string = ""
 
@@ -126,11 +126,14 @@ def welcome():
 
     if request.method == 'POST':
 
+        # build a connection to the DB with failsave
+        connectionInnerScope = variable.createConnection()
+
         # remove the browser from the session
         session.pop('username', None)
 
         # add every user registered to an a array (maybe not scale friendly)
-        dbU.fillArray(connection)
+        dbU.fillArray(connectionInnerScope)
 
         # request the data typed in
         usernameInput = request.form['username']
@@ -140,7 +143,7 @@ def welcome():
         passwordInput = hashlib.md5(passwordInput.encode()).hexdigest()
 
         # get the user from the db
-        values = dbU.getUser(connection, usernameInput)
+        values = dbU.getUser(connectionInnerScope, usernameInput)
 
         # iterate through the user
         for row in values:
@@ -205,12 +208,15 @@ def register():
         if passwordInput != repeatpasswordInput:
             error = "ERROR: Deine Passwörter müssen übereinstimmen"
 
+        # build a connection to the DB with failsave
+        connectionInnerScope = variable.createConnection()
+
         # Ask the DB if the username is already taken
-        if not dbU.doesUsernameAlreadyExist(connection, usernameInput):
+        if not dbU.doesUsernameAlreadyExist(connectionInnerScope, usernameInput):
             error = "ERROR: Benutzername existiert bereits"
 
         # Check if the invitation code is an actually invitation
-        if not dbU.doesInvitationExist(connection, invitationInput):
+        if not dbU.doesInvitationExist(connectionInnerScope, invitationInput):
             error = "ERROR: Einladungscode existiert nicht"
 
         # Check if User is just dumb or trying to the the errorhandling
@@ -230,9 +236,9 @@ def register():
             error = "ERROR: Dein Benutzername muss mindestens 4 Zeichen lang sein"
 
         # If all checks are passed then the Account gets created and the password get stored in the DB transformed to a md5 hash
-        if len(usernameInput) >= 4 and passwordInput == repeatpasswordInput and dbU.doesUsernameAlreadyExist(connection,
+        if len(usernameInput) >= 4 and passwordInput == repeatpasswordInput and dbU.doesUsernameAlreadyExist(connectionInnerScope,
                                                                                                              usernameInput) \
-                and dbU.doesInvitationExist(connection, invitationInput) and \
+                and dbU.doesInvitationExist(connectionInnerScope, invitationInput) and \
                 len(passwordInput) >= 8 and not any(not c.isalnum() for c in usernameInput):
             error = "Dein Account wurde erstellt, logge dich nun ein"
 
@@ -240,10 +246,10 @@ def register():
             passwordInput = hashlib.md5(passwordInput.encode()).hexdigest()
 
             # add the user to the db
-            dbU.insertValueIntoUser(connection, usernameInput, passwordInput)
+            dbU.insertValueIntoUser(connectionInnerScope, usernameInput, passwordInput)
 
             # delete the invitation
-            dbU.deleteInvitation(connection, invitationInput)
+            dbU.deleteInvitation(connectionInnerScope, invitationInput)
 
     return render_template("register.html", error=error)  # render a templates
 
