@@ -25,6 +25,7 @@ Dependencies:
 
 > Flask </br>
 > Jinja2 </br>
+> requests </br>
 > mysql-connector-python
 
 
