@@ -1,6 +1,9 @@
 # SDN python
 Python SDN control center with Flask. Mainly build for the GUI.
 
+* Firstly: The latest release is testable at <a href="http://wycoserver.net">wycoserver.net</a></br>
+
+
 Flask web server with Jinja2 object paired with the beautiful bootstrap v5 framework.
 This SDN control center is a school project and is not a real thing.
 It should simulate how it could look and "feel".
@@ -15,13 +18,10 @@ As you probably have seen many resource references (mainly in the HTML part) go 
 project and is not finished yet. The website is built similar, but there is no communication with Cisco. <a href="https://wycofane.de">Wycofane.de</a> communicates with the 
 Proxmox rest-API.
 
-The release is testable at <a href="http://wycoserver.net">wycoserver.net</a>
+## Get started:
+<a href="https://github.com/wycofane/sdn/wiki">Read the Documentation -> Wiki</a>
 
-Get started:
-<a href="https://github.com/wycofane/sdn/wiki">Wiki</a>
-
-</br>
-Dependencies:
+## Dependencies:
 
 > Flask </br>
 > Jinja2 </br>
