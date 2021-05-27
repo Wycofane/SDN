@@ -7,9 +7,18 @@ import variable
 from logger import logger
 from mainUtility import addDevicesToGui, buildSiteCP
 from sensitiveData import adminUsername
+from flask_limiter import Limiter
+from flask_limiter.util import get_remote_address
 
 # Initialize the Flask APP
 app = Flask(__name__)
+
+# limit access - anti bruteforce
+limiter = Limiter(
+    app,
+    key_func=get_remote_address,
+
+)
 
 # Secret app key for Session usage
 app.secret_key = variable.secretkey
@@ -118,6 +127,7 @@ def internal_server_error(e):
 
 
 @app.route('/login', methods=['GET', 'POST'])
+@limiter.limit("50 per hour")
 def welcome():
     error = None
 
@@ -164,8 +174,6 @@ def welcome():
                 else:
                     return redirect(url_for('home'))
 
-            else:
-                error = 'Falsche Login Daten bitte erneut versuchen!'
         error = 'Falsche login Daten bitte erneut versuchen!'
 
     return render_template("loginform.html", error=error)  # render a templates
@@ -304,8 +312,6 @@ def controlpanelAction():
 # Controlpanel
 @app.route('/controlpanel', methods=['GET', 'POST'])
 def controlpanel():
-    error = None
-
     # Check if the user is in the global context logged in if not redirect to the main page
     if not g.user:
         return redirect(url_for('index'))
@@ -336,4 +342,3 @@ if __name__ == '__main__':
 
     # Run the flask server accessible in the LAN
     app.run(host="0.0.0.0", port=80)
-
