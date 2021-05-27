@@ -20,7 +20,6 @@ The release is testable at <a href="http://wycoserver.net">wycoserver.net</a>
 Get started:
 <a href="https://github.com/wycofane/sdn/wiki">Wiki</a>
 
-</br>
 ## Dependencies:
 
 > Flask </br>
