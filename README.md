@@ -17,8 +17,8 @@ Proxmox rest-API.
 
 The release is testable at <a href="http://wycoserver.net">wycoserver.net</a>
 
-Get started:
-<a href="https://github.com/wycofane/sdn/wiki">Wiki</a>
+## Get started:
+<a href="https://github.com/wycofane/sdn/wiki">Read the Documentation -> Wiki</a>
 
 ## Dependencies:
 
