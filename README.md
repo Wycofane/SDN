@@ -21,7 +21,7 @@ Get started:
 <a href="https://github.com/wycofane/sdn/wiki">Wiki</a>
 
 </br>
-Dependencies:
+### Dependencies:
 
 > Flask </br>
 > Jinja2 </br>
