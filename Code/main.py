@@ -152,6 +152,14 @@ def welcome():
         # convert the password to a md5 hash
         passwordInput = hashlib.md5(passwordInput.encode()).hexdigest()
 
+        maliciousChars = ['(', ')', ';', '=']
+
+        lenMC = len(maliciousChars)
+
+        for i in range(lenMC - 1):
+            if maliciousChars[i] in usernameInput:
+                return render_template("loginform.html", error="Please no SQL injections")
+
         # get the user from the db
         values = dbU.getUser(connectionInnerScope, usernameInput)
 
@@ -211,6 +219,14 @@ def register():
 
         # Get the invitation from the form
         invitationInput = request.form['invitation']
+
+        maliciousChars = ['(', ')', ';', '=']
+
+        lenMC = len(maliciousChars)
+
+        for i in range(lenMC - 1):
+            if maliciousChars[i] in usernameInput:
+                return render_template("register.html", error="Please no SQL injections")
 
         # First check: are the both passwords the same
         if passwordInput != repeatpasswordInput:
@@ -334,7 +350,7 @@ def bonus():
 
 
 # "Main function" start of the Flask APP
-if __name__ == '__main__':
+def main():
     logger('Startup SDN Controller')
 
     # add the devices of the sandbox dynamically
