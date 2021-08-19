@@ -1,8 +1,6 @@
 # SDN python
 Python SDN control center with Flask. Mainly build for the GUI.
 
-* Firstly: The latest release is testable at <a href="http://wycoserver.net">wycoserver.net</a></br>
-
 
 Flask web server with Jinja2 object paired with the beautiful bootstrap v5 framework.
 This SDN control center is a school project and is not a real thing.
